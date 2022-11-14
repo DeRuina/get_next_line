@@ -5,53 +5,29 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/10 16:09:34 by druina            #+#    #+#             */
-/*   Updated: 2022/11/11 15:16:30 by druina           ###   ########.fr       */
+/*   Created: 2022/11/14 11:26:23 by druina            #+#    #+#             */
+/*   Updated: 2022/11/14 12:36:42 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char	*get_next_line(int fd)
+char	*get_next_line_(int fd)
 {
-	char	buf[BUFFER_SIZE +1];
-	int		ret;
-	//int newline;
+	char buf[BUFFER_SIZE +1];
+	int ret;
+	static char *temp;
+	char *line;
 
 	if (fd == -1)
-		return (NULL);
-
-
-	while(1)
-	{
+		return(NULL);
 	ret = read(fd, buf, BUFFER_SIZE);
+	temp = buf;
 
-	if (ret < BUFFER_SIZE)
-	{
-		buf[ret] = '\0';
-		printf("%s\n", buf);
-		printf("%d\n", ret);
-		break;
-	}
-	else
-		{
-			buf[ret] = '\0';
-			printf("%s\n", buf);
-		}
-printf("%d\n", ret);
-	}
-	printf("%d\n", 3);
-	return (NULL);
+	// if (ft_strchr(temp, '\n')!= NULL)
+	// {
+	// 	line =
+	// }
 
-}
-
-int	main(void)
-{
-	char *str;
-	int	fd;
-	fd = open("test.txt", O_RDWR);
-	str = get_next_line(fd);
-	 printf("%s\n", get_next_line(fd));
-	close(fd);
-		return (0);
+	return(NULL);
 }
