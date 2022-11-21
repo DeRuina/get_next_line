@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/18 13:42:40 by druina            #+#    #+#             */
-/*   Updated: 2022/11/21 13:18:36 by druina           ###   ########.fr       */
+/*   Created: 2022/11/21 11:10:40 by druina            #+#    #+#             */
+/*   Updated: 2022/11/21 14:47:34 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 int	cleanit(int ret, char *keep, char *temp)
 {
@@ -26,14 +26,14 @@ int	cleanit(int ret, char *keep, char *temp)
 	return (1);
 }
 
-char	*getln(char *buf, int ret, char *keep, char *temp)
+char	*getln(int ret, char *keep, char *temp)
 {
 	int		i;
 	char	*line;
 	int		len;
 
 	i = 0;
-	while (buf[i] != '\0' && buf[i] != '\n')
+	while (keep[i] != '\0' && keep[i] != '\n')
 		i++;
 	line = (char *)malloc(sizeof(char) * (i + 1));
 	if (!line)
@@ -42,7 +42,7 @@ char	*getln(char *buf, int ret, char *keep, char *temp)
 	i = 0;
 	while (i < len)
 	{
-		line[i] = buf[i];
+		line[i] = keep[i];
 		i++;
 	}
 	line[i] = '\0';
@@ -80,9 +80,9 @@ char	*keepandfree(char *keep, char *buf, char *temp)
 
 char	*get_next_line(int fd)
 {
-	char		buf[BUFFER_SIZE + 1];
+	char		buf[BUFFER_SIZE +1];
 	int			ret;
-	static char	*keep;
+	static char	*keep[10240];
 	char		*temp;
 	char		*line;
 
@@ -92,17 +92,17 @@ char	*get_next_line(int fd)
 	while (ret > 0)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
-		if (ret == -1 || (ret == 0 && keep == NULL))
+		if (ret == -1 || (ret == 0 && keep[fd] == NULL))
 			return (NULL);
 		buf[ret] = '\0';
-		temp = keep;
-		keep = keepandfree(keep, buf, temp);
-		if (ft_strchr(keep, '\n'))
+		temp = keep[fd];
+		keep[fd] = keepandfree(keep[fd], buf, temp);
+		if (ft_strchr(keep[fd], '\n'))
 			break ;
 	}
-	line = getln(keep, ret, keep, temp);
-	temp = keep;
-	keep = keepbuf(temp);
+	line = getln(ret, keep[fd], temp);
+	temp = keep[fd];
+	keep[fd] = keepbuf(temp);
 	free(temp);
 	return (line);
 }
