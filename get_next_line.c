@@ -6,27 +6,40 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 13:42:40 by druina            #+#    #+#             */
-/*   Updated: 2022/11/21 13:18:36 by druina           ###   ########.fr       */
+/*   Updated: 2022/11/23 11:38:40 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "libft.h"
 
-int	cleanit(int ret, char *keep, char *temp)
+static	char	*freelasttime(char *keep, char *line)
 {
-	if (ret == 0 && !*keep)
-	{
-		if (temp)
-			free(temp);
-		if (keep)
-			free(keep);
-		keep = NULL;
-		return (0);
-	}
-	return (1);
+	free(keep);
+	free(line);
+	return (NULL);
 }
 
-char	*getln(char *buf, int ret, char *keep, char *temp)
+static	char	*keepbuf(char *keep)
+{
+	int		i;
+	int		j;
+	char	*leftover;
+
+	i = 0;
+	j = 0;
+	while (keep[i] != '\0' && keep[i] != '\n')
+		i++;
+	leftover = (char *)malloc(sizeof(char) * (ft_strlen(keep) - i + 1));
+	if (!leftover)
+		return (NULL);
+	while (keep[i] != '\0')
+		leftover[j++] = keep[++i];
+	leftover[j] = '\0';
+	free(keep);
+	return (leftover);
+}
+
+static char	*getln(char *buf)
 {
 	int		i;
 	char	*line;
@@ -35,7 +48,7 @@ char	*getln(char *buf, int ret, char *keep, char *temp)
 	i = 0;
 	while (buf[i] != '\0' && buf[i] != '\n')
 		i++;
-	line = (char *)malloc(sizeof(char) * (i + 1));
+	line = (char *)malloc(sizeof(char) * (i + 2));
 	if (!line)
 		return (NULL);
 	len = i + 1;
@@ -46,36 +59,17 @@ char	*getln(char *buf, int ret, char *keep, char *temp)
 		i++;
 	}
 	line[i] = '\0';
-	if (cleanit(ret, keep, temp) == 0)
-		return (NULL);
 	return (line);
 }
 
-char	*keepbuf(char *buf)
+static char	*keepandfree(char *keep, char *buf)
 {
-	int		i;
-	int		j;
-	char	*leftover;
+	char	*answer;
 
-	i = 0;
-	j = 0;
-	while (buf[i] != '\0' && buf[i] != '\n')
-		i++;
-	leftover = (char *)malloc(sizeof(char) * (ft_strlen(buf) - i + 1));
-	if (!leftover)
-		return (NULL);
-	while (buf[i] != '\0')
-		leftover[j++] = buf[++i];
-	leftover[j] = '\0';
-	return (leftover);
-}
-
-char	*keepandfree(char *keep, char *buf, char *temp)
-{
-	keep = ft_strjoin(temp, buf);
-	if (temp)
-		free(temp);
-	return (keep);
+	answer = ft_strjoin(keep, buf);
+	if (keep)
+		free(keep);
+	return (answer);
 }
 
 char	*get_next_line(int fd)
@@ -83,7 +77,6 @@ char	*get_next_line(int fd)
 	char		buf[BUFFER_SIZE + 1];
 	int			ret;
 	static char	*keep;
-	char		*temp;
 	char		*line;
 
 	ret = 1;
@@ -95,14 +88,13 @@ char	*get_next_line(int fd)
 		if (ret == -1 || (ret == 0 && keep == NULL))
 			return (NULL);
 		buf[ret] = '\0';
-		temp = keep;
-		keep = keepandfree(keep, buf, temp);
+		keep = keepandfree(keep, buf);
 		if (ft_strchr(keep, '\n'))
 			break ;
 	}
-	line = getln(keep, ret, keep, temp);
-	temp = keep;
-	keep = keepbuf(temp);
-	free(temp);
+	line = getln(keep);
+	keep = keepbuf(keep);
+	if (ret == 0 && !*line)
+		return (freelasttime(keep, line));
 	return (line);
 }
