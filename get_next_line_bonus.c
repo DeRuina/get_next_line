@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_multiple.c                           :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 11:10:40 by druina            #+#    #+#             */
-/*   Updated: 2022/11/23 11:42:39 by druina           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:37:54 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "get_next_line_bonus.h"
 
 static char	*freelasttime(char *keep, char *line)
 {
