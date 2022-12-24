@@ -6,11 +6,11 @@
 /*   By: druina <druina@student.hive.fi>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 13:42:40 by druina            #+#    #+#             */
-/*   Updated: 2022/11/23 11:38:40 by druina           ###   ########.fr       */
+/*   Updated: 2022/12/21 23:37:55 by druina           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "get_next_line.h"
 
 static	char	*freelasttime(char *keep, char *line)
 {
