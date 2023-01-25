@@ -15,6 +15,10 @@ the command:
 ```bash
  make
 ```
+### Evaluated by moulinette
+
+![125/100](img/125.png)
+
 ## Author
 
 - [@DeRuina](https://github.com/DeRuina)
